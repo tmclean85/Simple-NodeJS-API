@@ -1,0 +1,11 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "simple nodejs api",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "tmclean",
+  "license": "ISC"
+}
