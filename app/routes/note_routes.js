@@ -3,6 +3,24 @@ var ObjectID = require('mongodb').ObjectID;
 
 module.exports = function(app, db) {
 
+  //update note based on id
+  app.put('/notes/:id', (req, res) => {
+    const id = req.params.id;
+    const details = {'_id': new ObjectID(id)};
+    const note = {
+      speaker: req.body.speaker,
+      quote: req.body.quote,
+      date: req.body.date
+    };
+    db.collection('notes').update(details, note, (err, result) => {
+      if(err) {
+        res.send({'error':'An error has occurred'});
+      } else {
+        res.send('Quote ' + id + ' has been updated: ' + note);
+      }
+    });
+  });
+
   //delete note based on id
   app.delete('/notes/:id', (req, res) => {
     const id = req.params.id;
