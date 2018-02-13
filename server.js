@@ -9,12 +9,14 @@ const db = require('./config/db');
 // init bodyParser
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// deal with CORS
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
 
+// le server
 MongoClient.connect(db.url, (err, database) => {
   if(err) {
     return console.log(err)
@@ -24,6 +26,3 @@ MongoClient.connect(db.url, (err, database) => {
     console.log('Mic check one two, port ' + port);
   });
 });
-
-// passed empty obj pending db creation
-

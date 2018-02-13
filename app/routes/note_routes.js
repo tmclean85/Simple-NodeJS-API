@@ -3,7 +3,7 @@ var ObjectID = require('mongodb').ObjectID;
 
 module.exports = function(app, db) {
 
-  //update note based on id
+  //update note by id
   app.put('/notes/:id', (req, res) => {
     const id = req.params.id;
     const details = {'_id': new ObjectID(id)};
@@ -21,7 +21,7 @@ module.exports = function(app, db) {
     });
   });
 
-  //delete note based on id
+  //delete note by id
   app.delete('/notes/:id', (req, res) => {
     const id = req.params.id;
     const details = {'_id': new ObjectID(id)};
@@ -34,7 +34,7 @@ module.exports = function(app, db) {
     });
   });
 
-  //get post json by id
+  //get note by id
   app.get('/notes/:id', (req, res) => {
     const id = req.params.id;
     const details = { '_id': new ObjectID(id) };
@@ -42,10 +42,35 @@ module.exports = function(app, db) {
       if (err) {
         res.send({'error':'An error has occurred'});
       } else {
-        res.send(item);
+        res.send(JSON.stringify(item));
       }
     });
   });
+
+  //get notes by speaker, else get all notes
+  app.get('/notes', (req, res) => {
+    const speaker = req.query.speaker;
+    const details = { 'speaker': speaker };
+    if(speaker) {
+      db.collection('notes').findOne(details, (err, item) => {
+        if (err) {
+          res.send({'error':'An error has occurred'});
+        } else {
+          res.send(JSON.stringify(item));
+        }
+      });
+    } else {
+      db.collection('notes').find({}).toArray((err, result) => {
+        if(err) {
+          res.send({'error':err});
+        } else {
+          res.send(JSON.stringify(result));
+        }
+      });
+    }
+
+  });
+
 
   //post note to collection
   app.post('/notes', (req, res) => {
@@ -54,7 +79,8 @@ module.exports = function(app, db) {
       quote: req.body.quote,
       date: req.body.date
     };
-    db.collection('notes').insert(note, (err, result) => {
+    console.log(req.body);
+    db.collection('notes').insertOne(note, (err, result) => {
       if (err) {
         res.send({ 'error': 'An error has occurred' }); 
       } else {
