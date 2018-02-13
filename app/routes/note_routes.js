@@ -47,7 +47,7 @@ module.exports = function(app, db) {
     });
   });
 
-  //get notes by speaker, else get all notes
+  //get notes by speaker if req param exists, else get all notes
   app.get('/notes', (req, res) => {
     const speaker = req.query.speaker;
     const details = { 'speaker': speaker };
@@ -70,7 +70,6 @@ module.exports = function(app, db) {
     }
 
   });
-
 
   //post note to collection
   app.post('/notes', (req, res) => {

@@ -8,6 +8,8 @@ const db = require('./config/db');
 
 // init bodyParser
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 
 // deal with CORS
 app.use(function(req, res, next) {
