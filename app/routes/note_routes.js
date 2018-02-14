@@ -50,13 +50,13 @@ module.exports = function(app, db) {
   //get notes by speaker if req param exists, else get all notes
   app.get('/notes', (req, res) => {
     const speaker = req.query.speaker;
-    const details = { 'speaker': speaker };
+    const details = { "speaker": speaker };
     if(speaker) {
-      db.collection('notes').findOne(details, (err, item) => {
-        if (err) {
-          res.send({'error':'An error has occurred'});
+      db.collection('notes').find(details).toArray((err, result) => {
+        if(err) {
+          res.send({'error':err});
         } else {
-          res.send(JSON.stringify(item));
+          res.send(JSON.stringify(result));
         }
       });
     } else {
